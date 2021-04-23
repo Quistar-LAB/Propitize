@@ -1,4 +1,4 @@
-Propitize is a mod for Cities Skylines, and is a mod to convert trees to props on the fly. It is integrated with MoveIt mod, so actions can be more convenient. I didn't write the codes for saving the props, but if you want the tree(props) to be saved, just convert it to PO.
+Propitize is a mod for Cities Skylines, and is a mod to convert trees to props on the fly. It is integrated with MoveIt mod, so actions can be more convenient. I didn't write the codes for saving the props yet, so it'll have to come later as I find time.
 
 I created this mod, because Tree and Vehicle prop really didn't help, as it converts all trees, and I really don't use most tree in difficult to plop situations.
 
