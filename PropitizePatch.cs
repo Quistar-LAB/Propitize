@@ -1,8 +1,5 @@
 ﻿using System.Reflection;
-using System.Collections.Generic;
-using ICities;
 using UnityEngine;
-using ColossalFramework.UI;
 using MoveIt;
 using HarmonyLib;
 
@@ -19,8 +16,6 @@ namespace Propitize
 
             patched = true;
 
-            // Apply your patches here!
-            // Harmony.DEBUG = true;
             var harmony = new Harmony("Propitize");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
@@ -34,9 +29,10 @@ namespace Propitize
             patched = false;
         }
 
-        [HarmonyPatch(typeof(UIToolOptionPanel), "Start")]
         public static class PropitizeInstallation
         {
+            // Attach button to MoveIt mod panel
+            [HarmonyPatch(typeof(UIToolOptionPanel), "Start")]
             public static void Postfix()
             {
                 if (UIToolOptionPanel.instance == null) return;
@@ -48,16 +44,13 @@ namespace Propitize
                 PropitizeButton.CreateSubButton(UIToolOptionPanel.instance, "Propitize", "Propitize", "Propitize");
             }
 
+            // Get selection list and perform conversion
             [HarmonyPatch(typeof(SelectAction), "Add")]
             public static class PropitizeMoveItSelectionBinderPatch
             {
                 private static void Postfix()
                 {
-                    List<ushort> t = PropitizeAction.ExtractPropsFromMoveItSelection();
-                    for (int i = 0; i < t.Count; i++)
-                    {
-                       // Db.w((i + 1) + ": " + t[i]);
-                    }
+                    PropitizeAction.ExtractPropsFromMoveItSelection();
                 }
             }
         }

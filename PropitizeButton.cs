@@ -9,9 +9,8 @@ namespace Propitize
 {
     public class PropitizeButton : UIPanel
     {
-        static public UIButton m_propitize_button;
-
-         // Copied over from Move it
+        static private UIButton m_propitize_button;
+        // Copied over from Moveit mod
         static public UIButton CreateSubButton(UIToolOptionPanel parent, string name, string tooltip, string fgSprite)
         {
             m_propitize_button = parent.m_viewOptions.AddUIComponent<UIButton>();
@@ -41,6 +40,7 @@ namespace Propitize
 
             return m_propitize_button;
         }
+
         static internal UITextureAtlas GetIconsAtlas()
         {
             UITextureAtlas atlas = UIUtils.GetAtlas("Ingame");
@@ -56,26 +56,20 @@ namespace Propitize
                 atlas["OptionsDropboxListboxFocused"].texture
             };
 
-            string[] spriteNames = new string[]
-            {
-                "Propitize"
-            };
-
-            UITextureAtlas loadedAtlas = CreateTextureAtlas("Propitize", spriteNames, "Propitize.icon.");
+            UITextureAtlas loadedAtlas = CreateTextureAtlas("Propitize", "Propitize.icon.");
             AddTexturesInAtlas(loadedAtlas, textures);
 
             return loadedAtlas;
         }
 
-        private static UITextureAtlas CreateTextureAtlas(string atlasName, string[] spriteNames, string assemblyPath)
+        static private UITextureAtlas CreateTextureAtlas(string spriteName, string assemblyPath)
         {
-            int maxSize = 1024;
+            const int maxSize = 1024;
             Texture2D texture2D = new Texture2D(maxSize, maxSize, TextureFormat.ARGB32, false);
-            Texture2D[] textures = new Texture2D[spriteNames.Length];
-            Rect[] regions = new Rect[spriteNames.Length];
+            Texture2D[] textures = new Texture2D[1];
+            Rect[] regions = new Rect[1];
 
-            for (int i = 0; i < spriteNames.Length; i++)
-                textures[i] = loadTextureFromAssembly(assemblyPath + spriteNames[i] + ".png");
+            textures[0] = loadTextureFromAssembly(assemblyPath + spriteName + ".png");
 
             regions = texture2D.PackTextures(textures, 4, maxSize);
 
@@ -83,20 +77,16 @@ namespace Propitize
             Material material = Object.Instantiate(UIView.GetAView().defaultAtlas.material);
             material.mainTexture = texture2D;
             textureAtlas.material = material;
-            textureAtlas.name = atlasName;
+            textureAtlas.name = spriteName;
 
-            for (int i = 0; i < spriteNames.Length; i++)
+            UITextureAtlas.SpriteInfo item = new UITextureAtlas.SpriteInfo
             {
-                UITextureAtlas.SpriteInfo item = new UITextureAtlas.SpriteInfo
-                {
-                    name = spriteNames[i],
-                    texture = textures[i],
-                    region = regions[i],
-                };
-
-                textureAtlas.AddSprite(item);
-            }
-
+                name = spriteName,
+                texture = textures[0],
+                region = regions[0],
+            };
+            textureAtlas.AddSprite(item);
+            
             return textureAtlas;
         }
 
@@ -113,14 +103,12 @@ namespace Propitize
                     // Locked textures workaround
                     RenderTexture renderTexture = RenderTexture.GetTemporary(texture2D.width, texture2D.height, 0);
                     Graphics.Blit(texture2D, renderTexture);
-
                     RenderTexture active = RenderTexture.active;
                     texture2D = new Texture2D(renderTexture.width, renderTexture.height);
                     RenderTexture.active = renderTexture;
                     texture2D.ReadPixels(new Rect(0f, 0f, (float)renderTexture.width, (float)renderTexture.height), 0, 0);
                     texture2D.Apply();
                     RenderTexture.active = active;
-
                     RenderTexture.ReleaseTemporary(renderTexture);
                 }
 
