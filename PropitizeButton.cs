@@ -32,7 +32,7 @@ namespace Propitize
 
             m_propitize_button.eventClicked += (c, p) =>
             {
-                PropitizeAction.instance.StartConvertAction();
+                PropitizeTool.instance.StartConvertAction();
             };
 
             parent.m_viewOptions.height += 36;

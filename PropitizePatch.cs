@@ -39,7 +39,7 @@ namespace Propitize
 
                 // Initilization
                 ToolController toolController = Object.FindObjectOfType<ToolController>();
-                PropitizeAction.instance = toolController.gameObject.AddComponent<PropitizeAction>();
+                PropitizeTool.instance = toolController.gameObject.AddComponent<PropitizeTool>();
 
                 PropitizeButton.CreateSubButton(UIToolOptionPanel.instance, "Propitize", "Propitize", "Propitize");
             }
@@ -50,7 +50,7 @@ namespace Propitize
             {
                 private static void Postfix()
                 {
-                    PropitizeAction.ExtractPropsFromMoveItSelection();
+                    PropitizeTool.ExtractPropsFromMoveItSelection();
                 }
             }
         }
