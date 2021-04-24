@@ -13,7 +13,7 @@ namespace Propitize
         public string Name => "Propitize 0.1";
         public string Description => "Converts Trees to Props. Integrated into Move it";
 
-        public static Dictionary<PropInfo, PropInfo> convertedTreePropMap = new Dictionary<PropInfo, PropInfo>();
+        public static Dictionary<PropInfo, TreeInfo> PropitizedTreeMap = new Dictionary<PropInfo, TreeInfo>();
 
         public void OnEnabled()
         {
