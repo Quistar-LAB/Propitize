@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ColossalFramework;
-using ColossalFramework.UI;
 using UnityEngine;
-using ICities;
 using MoveIt;
 
 
@@ -42,7 +40,7 @@ namespace Propitize
             StartConversion();
         }
 
-        private static PropInfo customClone()
+        private static PropInfo CreateClone()
         {
             PropInfo tempProp = PrefabCollection<PropInfo>.GetLoaded(0);
             GameObject gameObject = UnityEngine.Object.Instantiate(tempProp.gameObject);
@@ -53,7 +51,7 @@ namespace Propitize
         }
 
 
-        public PropInfo ConvertToProp(PropInfo propInfo, Instance instance)
+        private PropInfo ConvertToProp(PropInfo propInfo, Instance instance)
         {
             if (instance == null) return null;
 
@@ -109,7 +107,7 @@ namespace Propitize
             return propInfo;
         }
 
-        public void StartConversion()
+        private void StartConversion()
         {
             m_clones = new HashSet<Instance>();
 
@@ -119,16 +117,16 @@ namespace Propitize
                 {
                     lock(state.instance.data)
                     {
-                        PropInfo propInfo = customClone();
+                        PropInfo propInfo = CreateClone();
                         if (propInfo == null)
                         {
-                            Log.Debug($"Propitize: Failed to Propitize {state}");
+                            Log.Debug($"Propitize: Failed to create clone {state}");
                             continue;
                         }
                         Instance instanceProp = null;
-                        if (PropManager.instance.CreateProp(out ushort clone, ref SimulationManager.instance.m_randomizer, propInfo, state.position, state.angle, true))
+                        if (Singleton<PropManager>.instance.CreateProp(out ushort clone, ref SimulationManager.instance.m_randomizer, propInfo, state.position, state.angle, true))
                         {
-                            InstanceID cloneID = default(InstanceID);
+                            InstanceID cloneID = default;
                             cloneID.Prop = clone;
                             instanceProp = new MoveableProp(cloneID);
                         }
@@ -153,73 +151,6 @@ namespace Propitize
         public override void ReplaceInstances(Dictionary<Instance, Instance> toReplace)
         {
             throw new NotImplementedException();
-        }
-    }
-
-    public partial class PropitizeAction : ToolBase
-    {
-        public static PropitizeAction instance;
-        public ToolAction m_nextAction = ToolAction.None;
-
-        public void StartConvertAction()
-        {
-            if (ActionQueue.instance == null)
-            {
-                return;
-            }
-
-            if (MoveIt.Action.selection.Count > 0)
-            {
-                PropitizeActionBase action = new PropitizeActionBase(true);
-                lock (ActionQueue.instance)
-                {
-                    ActionQueue.instance.Push(action);
-                }
-            }
-        }
-        // Acquiring and parsing move it selections
-        static public List<ushort> ExtractPropsFromMoveItSelection()
-        {
-            HashSet<Instance> MoveItSelection = MoveIt.Action.selection;
-
-            List<ushort> formattedProps = new List<ushort>();
-
-            foreach (Instance objectInstance in MoveItSelection)
-            {
-                InstanceID unreflected = objectInstance.id;
-                if (unreflected.Type == InstanceType.Prop)
-                {
-                    formattedProps.Add(unreflected.Prop);
-                }
-            }
-
-            return formattedProps;
-        }
-
-        internal static void Load()
-        {
-            try
-            {
-
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Exception occurred while reading data");
-                Debug.LogException(e);
-            }
-        }
-
-        internal static void Save()
-        {
-            try
-            {
-
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Exception occurred while saving data");
-                Debug.LogException(e);
-            }
         }
     }
 }
