@@ -2,6 +2,7 @@
 using UnityEngine;
 using MoveIt;
 using HarmonyLib;
+using ColossalFramework;
 
 namespace Propitize
 {
@@ -16,7 +17,7 @@ namespace Propitize
 
             patched = true;
 
-            var harmony = new Harmony("Propitize");
+            var harmony = new Harmony(HarmonyId);
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
         public static void UnpatchAll()
@@ -28,30 +29,44 @@ namespace Propitize
 
             patched = false;
         }
+    }
 
-        public static class PropitizeInstallation
+    [HarmonyPatch(typeof(UIToolOptionPanel), "Start")]
+    public static class PropitizeInstallation
+    {
+        // Attach button to MoveIt mod panel
+        public static void Postfix()
         {
-            // Attach button to MoveIt mod panel
-            [HarmonyPatch(typeof(UIToolOptionPanel), "Start")]
-            public static void Postfix()
+            if (UIToolOptionPanel.instance == null) return;
+
+            // Initilization
+            ToolController toolController = Object.FindObjectOfType<ToolController>();
+            PropitizeTool.instance = toolController.gameObject.AddComponent<PropitizeTool>();
+
+            PropitizeButton.CreateSubButton(UIToolOptionPanel.instance, "Propitize", "Propitize", "Propitize");
+        }
+    }
+
+    // Get selection list and perform conversion
+    [HarmonyPatch(typeof(SelectAction), "Add")]
+    public static class PropitizeMoveItSelectionBinderPatch
+    {
+        private static void Postfix()
+        {
+            PropitizeTool.ExtractPropsFromMoveItSelection();
+        }
+    }
+
+    [HarmonyPatch(typeof(RenderManager), "Managers_CheckReferences")]
+    public static class LoadingHook
+    {
+        public static void Prefix()
+        {
+            if (!PropitizeMod.PrefabsInitialized)
             {
-                if (UIToolOptionPanel.instance == null) return;
-
-                // Initilization
-                ToolController toolController = Object.FindObjectOfType<ToolController>();
-                PropitizeTool.instance = toolController.gameObject.AddComponent<PropitizeTool>();
-
-                PropitizeButton.CreateSubButton(UIToolOptionPanel.instance, "Propitize", "Propitize", "Propitize");
-            }
-
-            // Get selection list and perform conversion
-            [HarmonyPatch(typeof(SelectAction), "Add")]
-            public static class PropitizeMoveItSelectionBinderPatch
-            {
-                private static void Postfix()
-                {
-                    PropitizeTool.ExtractPropsFromMoveItSelection();
-                }
+                PropitizeMod.PrefabsInitialized = true;
+                Singleton<LoadingManager>.instance.QueueLoadingAction(PropitizeTool.GeneratePropitizedTreeFromFile());
+                Singleton<LoadingManager>.instance.QueueLoadingAction(PropitizeTool.InitializeAndBindPrefab());
             }
         }
     }
