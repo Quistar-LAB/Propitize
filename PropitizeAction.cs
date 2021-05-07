@@ -70,7 +70,6 @@ namespace Propitize
                         {
                             InstanceID cloneID = default;
                             cloneID.Prop = clone;
-                            Debug.Log($"Propitize: Created Prop with id = {cloneID.Prop}");
                             instanceProp = new MoveableProp(cloneID);
                         }
                         m_clones.Add(instanceProp);

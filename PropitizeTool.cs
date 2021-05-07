@@ -133,6 +133,18 @@ namespace Propitize
             propInfo.m_isCustomContent = tree.m_isCustomContent;
             propInfo.m_dlcRequired = tree.m_dlcRequired;
             propInfo.m_generatedInfo.m_propInfo = propInfo;
+            propInfo.m_maxScale = tree.m_maxScale;
+            propInfo.m_minScale = tree.m_minScale;
+            for (int i = 0; i < tree.m_variations.Length; i++)
+            {
+                propInfo.m_variations[i] = new PropInfo.Variation
+                {
+                    m_prop = propInfo,
+                };
+                propInfo.m_variations[i].m_prop.m_generatedInfo.m_size = tree.m_variations[i].m_tree.m_generatedInfo.m_size;
+            }
+                
+            /*
             if (propInfo.m_mesh != null)
             {
                 Vector3 one = Vector3.one;
@@ -147,6 +159,7 @@ namespace Propitize
                 Vector3 vector3 = one * (float)num2;
                 propInfo.m_generatedInfo.m_size = vector3;
             }
+            */
             if (propInfo.m_material != null)
             {
                 propInfo.m_material.SetColor("_ColorV0", propInfo.m_color0);

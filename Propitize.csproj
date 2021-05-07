@@ -28,6 +28,9 @@
     <Reference Include="CitiesHarmony">
       <HintPath>C:\Users\Quistar\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\2040656402 Harmony 2.0.4-3 (Mod Dependency)\CitiesHarmony.dll</HintPath>
     </Reference>
+    <Reference Include="CitiesHarmony.Harmony">
+      <HintPath>C:\Users\Quistar\AppData\Local\Colossal Order\Cities_Skylines\Addons\Mods\2040656402 Harmony 2.0.4-4 (Mod Dependency)\CitiesHarmony.Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="ColossalManaged">
       <HintPath>H:\Games\Cities Skylines Sunset Harbor\Cities_Data\Managed\ColossalManaged.dll</HintPath>
     </Reference>
