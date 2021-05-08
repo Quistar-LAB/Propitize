@@ -66,6 +66,7 @@ namespace Propitize
                         {
                             propInfo = PropitizeMod.PropitizedTreeMap.GetValueSafe<TreeInfo, PropInfo>(treeInfo);
                         }
+                        PropitizeTool.PropitizeTreeSizeRandomizer(ref propInfo);
                         if (Singleton<PropManager>.instance.CreateProp(out ushort clone, ref SimulationManager.instance.m_randomizer, propInfo, state.position, state.angle, true))
                         {
                             InstanceID cloneID = default;

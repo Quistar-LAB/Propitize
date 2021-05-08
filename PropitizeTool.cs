@@ -144,7 +144,6 @@ namespace Propitize
                 propInfo.m_variations[i].m_prop.m_generatedInfo.m_size = tree.m_variations[i].m_tree.m_generatedInfo.m_size;
             }
                 
-            /*
             if (propInfo.m_mesh != null)
             {
                 Vector3 one = Vector3.one;
@@ -159,7 +158,6 @@ namespace Propitize
                 Vector3 vector3 = one * (float)num2;
                 propInfo.m_generatedInfo.m_size = vector3;
             }
-            */
             if (propInfo.m_material != null)
             {
                 propInfo.m_material.SetColor("_ColorV0", propInfo.m_color0);
@@ -168,6 +166,14 @@ namespace Propitize
                 propInfo.m_material.SetColor("_ColorV3", propInfo.m_color3);
             }
             PropitizeMod.PropitizedTreeMap.Add(tree, propInfo);
+        }
+
+        public static void PropitizeTreeSizeRandomizer(ref PropInfo propInfo)
+        {
+            Vector3 size = propInfo.m_generatedInfo.m_size;
+            float scale = UnityEngine.Random.Range(0.68f, 1.83f);
+            size.Scale(new Vector3(scale, scale, scale));
+            propInfo.m_generatedInfo.m_size = size;
         }
     }
 }
