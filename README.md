@@ -7,3 +7,6 @@ This mod is very ALPHA, and more testing is required.
 I welcome anyone to create changes to this mod and improve upon it, as I don't have much time playing the game and programming mods.
 
 Most importantly, have fun playing around with this mod.
+
+NOTE*
+I'm working on the TreeAnarchy mod, as it will make this mod obsolete... so this mod will be put on hold, until someone feels its good enough to be worked on
